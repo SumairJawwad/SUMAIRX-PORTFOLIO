@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-space: "Space Grotesk", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-manrope: "Manrope", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-cyber-bg: #090714;
+  --color-cyber-surface-1: #0f0a21;
+  --color-cyber-surface-2: #140f2d;
+  --color-cyber-surface-card: #130e2a;
+  --color-cyber-purple: #a855f7;
+  --color-cyber-violet: #8b5cf6;
+  --color-cyber-glow: #c084fc;
+}
+
+body {
+  font-family: var(--font-manrope);
+  background-color: #090714;
+  color: #e6dff4;
+}
+
+h1, h2, h3, h4, h5, h6, .font-space {
+  font-family: var(--font-space);
+}
+
+.font-mono, code, kbd, samp, pre {
+  font-family: var(--font-mono);
+}
+
+/* Custom cybernetic scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090714;
+}
+::-webkit-scrollbar-thumb {
+  background: #2b1b54;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a855f7;
+}
+
+/* Print styles for Resume */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
