@@ -12,6 +12,7 @@ import {
   Shield,
   ChevronDown,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
 interface TerminalSectionProps {
@@ -57,7 +58,7 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
     setConsoleLogs([
       '[INIT] INITIALIZING 256-BIT CYBERNETIC HANDSHAKE...',
       `[PACKET] TRANSMITTER IDENT: ${formData.transmitterName.toUpperCase()}`,
-      `[ROUTE] TARGETING: sumairjawwad@gmail.com [PORT: SECURE-TELEMETRY]`,
+      `[ROUTE] TARGETING: ${PERSONAL_INFO.email} [PORT: SECURE-TELEMETRY]`,
     ]);
 
     setTimeout(() => {
@@ -90,23 +91,38 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
   };
 
   return (
-    <section id="terminal" className="py-16 scroll-mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="terminal" className="py-16 sm:py-20 scroll-mt-20 w-full overflow-hidden">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         {/* Section Header */}
-        <div className="pb-8 border-b border-[#261b54]/40">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.15 }}
+          transition={{ duration: 0.5 }}
+          className="pb-6 border-b border-[#261b54]/50"
+        >
           <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-slate-400 uppercase pb-2">
             <MessageSquare className="w-3.5 h-3.5 text-purple-400" />
             <span>COMMUNICATION TERMINAL // SECURE_HANDSHAKE</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold font-space text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-space text-white tracking-tight">
             Initiate Transmission
           </h2>
-        </div>
+          <p className="text-xs sm:text-sm font-mono text-purple-400 pt-1">
+            Direct encrypted messaging protocol and immediate contact channels
+          </p>
+        </motion.div>
 
         {/* Two-Column Grid */}
-        <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column: Direct Connectivity Coordinates */}
-          <div className="lg:col-span-5 space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="lg:col-span-5 space-y-6"
+          >
             <div className="space-y-3">
               <h3 className="text-xl font-bold font-space text-white">
                 Direct Connectivity Coordinates
@@ -212,10 +228,16 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
                 </span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Dispatch Console */}
-          <div className="lg:col-span-7">
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.15 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="lg:col-span-7"
+          >
             <div className="rounded-xl bg-[#0f0a24]/95 border border-[#261b54] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden">
               {/* Console Header */}
               <div className="px-5 py-3.5 bg-[#140e2e] border-b border-[#261b54] flex items-center justify-between text-[11px] font-mono">
@@ -403,7 +425,7 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
                 </form>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

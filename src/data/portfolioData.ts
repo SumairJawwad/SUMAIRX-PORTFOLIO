@@ -1,5 +1,25 @@
 import { TelemetryMetric, ExperienceItem, SkillItem, DeploymentItem, EducationItem } from '../types';
 
+export const BANNER_DATA = {
+  headline: 'SUMAIR',
+  accentLetter: 'X',
+  credo: 'FOCUSED • DISCIPLINED • RELENTLESS',
+  tagline: 'BUILDING THE FUTURE. ONE IDEA AT A TIME.',
+  whatsapp: '+92 312 2382331',
+  whatsappRaw: '923122382331',
+  businessEmail: 'nexoraxsolutions@gmail.com',
+  personalEmail: 'sumairjawwad5@gmail.com',
+  quote: "THE FUTURE IS NOT SOMETHING WE WAIT FOR. IT'S SOMETHING WE BUILD.",
+  signature: 'Sumair X',
+  pillars: [
+    { label: 'DEVELOPER', icon: 'code' },
+    { label: 'AI ENTHUSIAST', icon: 'brain' },
+    { label: 'DREAMER', icon: 'rocket' },
+  ],
+  bannerImage: '/assets/sumair_banner.jpg',
+  sideCoordinates: 'DEVELOPER • DEEP MINDSET • DREAMER',
+};
+
 export const PERSONAL_INFO = {
   name: 'M. SUMAIR',
   lastName: 'JAWWAD',
@@ -9,7 +29,7 @@ export const PERSONAL_INFO = {
   status: 'SYS.STATUS // RECRUITMENT_MODE: OPERATIONAL | KARACHI, PK',
   availability: 'Available for Hire',
   bio: 'Enthusiastic and creative junior marketer with a passion for crafting impactful campaigns and driving brand growth. Skilled in social media management, content creation, and market research, eager to contribute fresh ideas and energy to a dynamic marketing team.',
-  email: 'sumairjawwad@gmail.com',
+  email: 'sumairjawwad5@gmail.com',
   phone: '+92 303-2754202',
   location: 'Karachi, Sindh, PK',
   locationDetailed: 'Karachi, Sindh, Pakistan',
@@ -303,16 +323,32 @@ export const EDUCATION: EducationItem[] = [
     id: 'edu-1',
     levelTag: 'COLLEGIATE LEVEL // CURRENT',
     institution: 'Bufferzone Degree Boys College',
-    subtitle: 'Enrolled in HSC Part II (Higher Secondary Certificate)',
+    subtitle: 'Higher Secondary Certificate (HSC Part II)',
+    period: '2023 – Present',
+    gradeBadge: 'In Progress',
+    focusArea: 'Pre-Engineering & Analytical Sciences',
     location: 'Karachi, Sindh, Pakistan',
+    highlights: [
+      'Advanced Mathematics & Analytical Reasoning',
+      'Physics & Empirical Problem Formulation',
+      'Continuous Academic Merit Standing',
+    ],
     iconName: 'school',
   },
   {
     id: 'edu-2',
     levelTag: 'SECONDARY SCHOOL CERTIFICATE',
     institution: 'White House Grammar School',
-    subtitle: 'Matriculation — Cleared with Grade "B"',
-    location: 'Foundational Academic Discipline',
+    subtitle: 'Secondary School Certificate (Matriculation)',
+    period: 'Completed',
+    gradeBadge: 'Grade "B" Achieved',
+    focusArea: 'General Sciences & Technical Foundations',
+    location: 'Karachi, Sindh, Pakistan',
+    highlights: [
+      'Rigorous General Science Curriculum',
+      'Computer & Digital Literacy Foundations',
+      'Consistent Extracurricular & Academic Discipline',
+    ],
     iconName: 'award',
   },
 ];

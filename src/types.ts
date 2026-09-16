@@ -54,4 +54,8 @@ export interface EducationItem {
   subtitle: string;
   location: string;
   iconName: 'school' | 'award';
+  period?: string;
+  gradeBadge?: string;
+  focusArea?: string;
+  highlights?: string[];
 }

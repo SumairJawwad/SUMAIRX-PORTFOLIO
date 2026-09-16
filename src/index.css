@@ -14,10 +14,21 @@
   --color-cyber-glow: #c084fc;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-manrope);
   background-color: #090714;
   color: #e6dff4;
+  min-height: 100vh;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
 }
 
 h1, h2, h3, h4, h5, h6, .font-space {

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
-import { Hero } from './components/Hero';
+import { BannerLanding } from './components/BannerLanding';
+import { AboutSection } from './components/AboutSection';
 import { TelemetrySection } from './components/TelemetrySection';
 import { ExperienceTimeline } from './components/ExperienceTimeline';
 import { SkillsMatrix } from './components/SkillsMatrix';
@@ -71,7 +72,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#090714] text-[#e6dff4] flex flex-col selection:bg-purple-600 selection:text-white relative">
+    <div className="min-h-screen w-full max-w-[100vw] overflow-x-hidden bg-[#090714] text-[#e6dff4] flex flex-col selection:bg-purple-600 selection:text-white relative">
       {/* Background Cybernetic Grid Subtle Pattern */}
       <div
         className="fixed inset-0 pointer-events-none opacity-[0.035] -z-10"
@@ -92,8 +93,16 @@ export default function App() {
 
       {/* Main Content Sections */}
       <main className="flex-1">
-        {/* Hero Section */}
-        <Hero
+        {/* Cybernetic Banner Landing Page */}
+        <BannerLanding
+          onOpenResume={() => setIsResumeOpen(true)}
+          onInitiateTransmission={handleInitiateTransmission}
+          onCopyText={handleCopyText}
+          copiedLabel={copiedLabel}
+        />
+
+        {/* Dedicated About & Executive Profile Section */}
+        <AboutSection
           onOpenResume={() => setIsResumeOpen(true)}
           onInitiateTransmission={handleInitiateTransmission}
           onCopyText={handleCopyText}
