@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { LayoutGrid, CheckCircle } from 'lucide-react';
+import { LayoutGrid, Search, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { SKILLS } from '../data/portfolioData';
 
 export const SkillsMatrix: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const categories = [
     { id: 'all', label: 'ALL PROFICIENCIES' },
@@ -14,10 +15,14 @@ export const SkillsMatrix: React.FC = () => {
     { id: 'marketing', label: 'SEO & STRATEGY' },
   ];
 
-  const filteredSkills =
-    selectedCategory === 'all'
-      ? SKILLS
-      : SKILLS.filter((s) => s.category === selectedCategory);
+  const filteredSkills = SKILLS.filter((s) => {
+    const matchesCategory = selectedCategory === 'all' || s.category === selectedCategory;
+    const matchesSearch =
+      searchQuery.trim() === '' ||
+      s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      s.subdescriptors.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <section id="matrix" className="py-16 sm:py-20 scroll-mt-20 w-full overflow-hidden">
@@ -43,21 +48,43 @@ export const SkillsMatrix: React.FC = () => {
             </p>
           </div>
 
-          {/* Quick filter tabs */}
-          <div className="flex flex-wrap gap-2 pt-2 md:pt-0">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[36px] ${
-                  selectedCategory === cat.id
-                    ? 'bg-purple-600/30 text-purple-200 border border-purple-500/60 shadow-[0_0_12px_rgba(168,85,247,0.3)]'
-                    : 'bg-[#140e2e]/60 text-slate-400 border border-[#261b54] hover:text-slate-200 hover:border-purple-800'
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          {/* Quick filter tabs & Search box */}
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 md:pt-0">
+            {/* Search Input */}
+            <div className="relative shrink-0">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search competency..."
+                className="w-full sm:w-48 pl-8 pr-8 py-1.5 rounded-lg bg-[#140e2e] border border-[#261b54] focus:border-purple-500 text-xs font-mono text-white placeholder-slate-500 focus:outline-none transition-all"
+              />
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-2">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-3 py-1.5 rounded-lg text-[11px] font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[36px] ${
+                    selectedCategory === cat.id
+                      ? 'bg-purple-600/30 text-purple-200 border border-purple-500/60 shadow-[0_0_12px_rgba(168,85,247,0.3)]'
+                      : 'bg-[#140e2e]/60 text-slate-400 border border-[#261b54] hover:text-slate-200 hover:border-purple-800'
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
         </motion.div>
 

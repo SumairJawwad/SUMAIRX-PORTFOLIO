@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Bot, Globe, Mail, Bus, ExternalLink, CheckCircle2, ShieldCheck, Terminal } from 'lucide-react';
 import { DeploymentItem } from '../types';
 
@@ -8,6 +8,17 @@ interface DeploymentModalProps {
 }
 
 export const DeploymentModal: React.FC<DeploymentModalProps> = ({ deployment, onClose }) => {
+  useEffect(() => {
+    if (deployment) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [deployment]);
+
   if (!deployment) return null;
 
   const getIcon = (iconName: string) => {
@@ -34,6 +45,9 @@ export const DeploymentModal: React.FC<DeploymentModalProps> = ({ deployment, on
   return (
     <div
       id="deployment-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="deployment-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto"
       onClick={onClose}
     >

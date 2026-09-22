@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, CheckCircle2, Calendar, MapPin, Briefcase, Clock, Send } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
@@ -13,11 +13,25 @@ export const AvailabilityModal: React.FC<AvailabilityModalProps> = ({
   onClose,
   onContactClick,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       id="availability-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="availability-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
       onClick={onClose}
     >

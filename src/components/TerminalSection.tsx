@@ -45,12 +45,28 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const applyTemplate = (domain: string, templateText: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      inquiryDomain: domain,
+      payloadMessage: templateText,
+    }));
+  };
+
   const handleDispatch = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.transmitterName.trim() || !formData.contactEmail.trim() || !formData.payloadMessage.trim()) {
       setDispatchStatus('error');
       setConsoleLogs(['[ERR] VALIDATION_FAILURE: ALL FIELDS REQUIRED FOR SECURE HANDSHAKE']);
+      return;
+    }
+
+    if (!emailRegex.test(formData.contactEmail.trim())) {
+      setDispatchStatus('error');
+      setConsoleLogs(['[ERR] INVALID_EMAIL_FORMAT: PLEASE PROVIDE A VALID EMAIL ADDRESS']);
       return;
     }
 
@@ -340,6 +356,53 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
                     </div>
                   </div>
 
+                  {/* Quick Preset Templates */}
+                  <div className="space-y-1.5">
+                    <span className="block text-[10px] font-mono tracking-wider text-cyan-400 uppercase">
+                      QUICK PRESET TRANSMISSION TEMPLATES:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          applyTemplate(
+                            'Customer Sales Executive / Outreach Role',
+                            'Hi Sumair,\n\nWe were impressed by your sales track record and would like to invite you for an interview regarding a Customer Sales Executive role.\n\nBest regards,'
+                          )
+                        }
+                        className="px-2.5 py-1 rounded bg-[#161036] hover:bg-purple-900/40 border border-purple-800/40 text-[10px] font-mono text-purple-300 hover:text-white transition-all cursor-pointer"
+                      >
+                        + Sales Exec Interview
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          applyTemplate(
+                            'Digital Marketing & SEO Lead',
+                            'Hi Sumair,\n\nWe are looking for a Junior Marketer to drive organic positioning and social media outreach. Let us discuss how you can contribute.\n\nBest,'
+                          )
+                        }
+                        className="px-2.5 py-1 rounded bg-[#161036] hover:bg-purple-900/40 border border-purple-800/40 text-[10px] font-mono text-purple-300 hover:text-white transition-all cursor-pointer"
+                      >
+                        + Digital Marketing Project
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          applyTemplate(
+                            'General Commercial Partnership',
+                            'Hi Sumair,\n\nI would like to schedule a brief introductory call to discuss potential remote/hybrid sales & outreach opportunities.\n\nThanks,'
+                          )
+                        }
+                        className="px-2.5 py-1 rounded bg-[#161036] hover:bg-purple-900/40 border border-purple-800/40 text-[10px] font-mono text-purple-300 hover:text-white transition-all cursor-pointer"
+                      >
+                        + Schedule Intro Call
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Inquiry Domain / Role */}
                   <div className="space-y-1.5">
                     <label
@@ -378,16 +441,22 @@ export const TerminalSection: React.FC<TerminalSectionProps> = ({
 
                   {/* Payload Message */}
                   <div className="space-y-1.5">
-                    <label
-                      htmlFor="payloadMessage"
-                      className="block text-[11px] font-mono tracking-wider text-slate-400 uppercase"
-                    >
-                      PAYLOAD_MESSAGE
-                    </label>
+                    <div className="flex items-center justify-between">
+                      <label
+                        htmlFor="payloadMessage"
+                        className="block text-[11px] font-mono tracking-wider text-slate-400 uppercase"
+                      >
+                        PAYLOAD_MESSAGE
+                      </label>
+                      <span className="text-[10px] font-mono text-slate-500">
+                        {formData.payloadMessage.length}/1000 CHARS
+                      </span>
+                    </div>
                     <textarea
                       id="payloadMessage"
                       name="payloadMessage"
                       rows={4}
+                      maxLength={1000}
                       required
                       value={formData.payloadMessage}
                       onChange={handleInputChange}

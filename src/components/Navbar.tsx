@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Terminal, FileText, Menu, X, CheckCircle2, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Terminal, FileText, Menu, X, CheckCircle2, ChevronRight, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 
@@ -10,16 +10,64 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenResume, onOpenAvailability }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('landing');
+  const [karachiTime, setKarachiTime] = useState<string>('');
 
   const navItems = [
-    { label: 'Banner', href: '#landing' },
-    { label: 'About', href: '#about' },
-    { label: 'Deployments', href: '#showcase' },
-    { label: 'Telemetry', href: '#telemetry' },
-    { label: 'Timeline', href: '#timeline' },
-    { label: 'Matrix', href: '#matrix' },
-    { label: 'Terminal', href: '#terminal' },
+    { id: 'landing', label: 'Banner', href: '#landing' },
+    { id: 'about', label: 'About', href: '#about' },
+    { id: 'showcase', label: 'Deployments', href: '#showcase' },
+    { id: 'telemetry', label: 'Telemetry', href: '#telemetry' },
+    { id: 'timeline', label: 'Timeline', href: '#timeline' },
+    { id: 'matrix', label: 'Matrix', href: '#matrix' },
+    { id: 'terminal', label: 'Terminal', href: '#terminal' },
   ];
+
+  // Update Karachi local time (UTC+5)
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: 'Asia/Karachi',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      };
+      setKarachiTime(new Intl.DateTimeFormat('en-US', options).format(now));
+    };
+
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // IntersectionObserver for scrollspy
+  useEffect(() => {
+    const sectionIds = navItems.map((item) => item.id);
+    const observerOptions = {
+      root: null,
+      rootMargin: '-20% 0px -50% 0px',
+      threshold: 0.1,
+    };
+
+    const handleIntersect: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersect, observerOptions);
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <header
@@ -44,23 +92,45 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenResume, onOpenAvailability
           </span>
         </div>
 
-        {/* Center Desktop Navigation - cleanly fitted */}
-        <nav id="desktop-navigation" className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-xs font-mono text-slate-400 hover:text-purple-300 transition-colors py-1 relative group tracking-wider"
-            >
-              <span className="text-purple-500/70 mr-1">//</span>
-              {item.label}
-              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-purple-400 to-cyan-400 group-hover:w-full transition-all duration-300"></span>
-            </a>
-          ))}
+        {/* Center Desktop Navigation - cleanly fitted with scrollspy */}
+        <nav id="desktop-navigation" className="hidden lg:flex items-center gap-3 xl:gap-5 shrink-0">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`text-xs font-mono transition-colors py-1 relative group tracking-wider ${
+                  isActive ? 'text-cyan-300 font-semibold' : 'text-slate-400 hover:text-purple-300'
+                }`}
+              >
+                <span className={isActive ? 'text-cyan-400 mr-1' : 'text-purple-500/70 mr-1'}>
+                  //
+                </span>
+                {item.label}
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-cyan-400 to-purple-400 transition-all duration-300 ${
+                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
+              </a>
+            );
+          })}
         </nav>
 
-        {/* Right Status Indicator & Action Trigger */}
+        {/* Right Live Time, Status Indicator & Action Trigger */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          {/* Live Karachi Time Clock */}
+          {karachiTime && (
+            <div
+              title="Current Time in Karachi, Pakistan (PKT / UTC+5)"
+              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#130d2d] border border-purple-900/50 text-[11px] font-mono text-purple-300"
+            >
+              <Clock className="w-3 h-3 text-cyan-400" />
+              <span>{karachiTime} PKT</span>
+            </div>
+          )}
+
           <button
             id="status-availability-pill"
             onClick={onOpenAvailability}

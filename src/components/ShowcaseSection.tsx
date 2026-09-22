@@ -1,5 +1,5 @@
-import React from 'react';
-import { Bot, Globe, Mail, Bus, ExternalLink, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { Bot, Globe, Mail, Bus, ExternalLink, Sparkles, Copy, Check } from 'lucide-react';
 import { motion } from 'motion/react';
 import { DEPLOYMENTS } from '../data/portfolioData';
 import { DeploymentItem } from '../types';
@@ -9,6 +9,16 @@ interface ShowcaseSectionProps {
 }
 
 export const ShowcaseSection: React.FC<ShowcaseSectionProps> = ({ onSelectDeployment }) => {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyUrl = (e: React.MouseEvent, url: string, id: string) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  };
+
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case 'bot':
@@ -116,9 +126,30 @@ export const ShowcaseSection: React.FC<ShowcaseSectionProps> = ({ onSelectDeploy
 
               {/* Bottom URL & Action Launch Bar */}
               <div className="pt-4 border-t border-[#211645] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <span className="font-mono text-xs text-slate-400 group-hover:text-purple-300 transition-colors truncate">
-                  {item.url}
-                </span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <button
+                    type="button"
+                    onClick={(e) => handleCopyUrl(e, item.fullUrl || item.url, item.id)}
+                    title="Copy direct endpoint URL"
+                    className="p-1.5 rounded bg-[#161036] hover:bg-purple-950 border border-purple-900/60 text-purple-300 hover:text-white transition-colors cursor-pointer text-xs shrink-0 flex items-center gap-1 min-h-[36px]"
+                  >
+                    {copiedId === item.id ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-400" />
+                        <span className="text-[10px] font-mono text-emerald-400">COPIED</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span className="text-[10px] font-mono hidden xl:inline">COPY URL</span>
+                      </>
+                    )}
+                  </button>
+
+                  <span className="font-mono text-xs text-slate-400 group-hover:text-purple-300 transition-colors truncate">
+                    {item.url}
+                  </span>
+                </div>
 
                 <button
                   type="button"

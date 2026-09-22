@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Printer, Download, Mail, Phone, MapPin, CheckCircle, ExternalLink } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { X, Printer, Download, Mail, Phone, MapPin, CheckCircle, ExternalLink, Copy, Check } from 'lucide-react';
 import { PERSONAL_INFO, EXPERIENCES, SKILLS, EDUCATION } from '../data/portfolioData';
 
 interface ResumeModalProps {
@@ -8,6 +8,18 @@ interface ResumeModalProps {
 }
 
 export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+  const [copiedText, setCopiedText] = useState(false);
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handlePrint = () => {
@@ -73,6 +85,9 @@ ${EDUCATION.map(
   return (
     <div
       id="resume-modal-backdrop"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="resume-modal-title"
       className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto"
       onClick={onClose}
     >
@@ -89,6 +104,46 @@ ${EDUCATION.map(
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                const plainText = `${PERSONAL_INFO.fullName.toUpperCase()}
+Role: ${PERSONAL_INFO.role}
+Email: ${PERSONAL_INFO.email} | Phone: ${PERSONAL_INFO.phone}
+Location: ${PERSONAL_INFO.locationDetailed} (${PERSONAL_INFO.workPreference})
+
+SUMMARY:
+${PERSONAL_INFO.bio}
+
+EXPERIENCE:
+${EXPERIENCES.map(e => `${e.title} (${e.tag} | ${e.dateRange})\n${e.capsules.map(c => `- ${c.text}`).join('\n')}`).join('\n\n')}
+
+SKILLS:
+${SKILLS.map(s => `${s.title}: ${s.subdescriptors}`).join('\n')}
+
+EDUCATION:
+${EDUCATION.map(e => `${e.institution} - ${e.subtitle} (${e.levelTag})`).join('\n')}`;
+
+                navigator.clipboard.writeText(plainText).then(() => {
+                  setCopiedText(true);
+                  setTimeout(() => setCopiedText(false), 2500);
+                });
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#1f1545] hover:bg-purple-900/40 text-xs font-mono text-purple-200 border border-purple-700/40 transition-all cursor-pointer"
+              title="Copy formatted plain text CV to clipboard"
+            >
+              {copiedText ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="hidden sm:inline text-emerald-400">COPIED</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">COPY TEXT</span>
+                </>
+              )}
+            </button>
+
             <button
               onClick={handlePrint}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#1f1545] hover:bg-purple-900/40 text-xs font-mono text-purple-200 border border-purple-700/40 transition-all cursor-pointer"
